@@ -1,6 +1,6 @@
 # UToolkit
 
-UToolkit is an all-in-one utility app for Apple platforms. It brings together calculation, conversion, developer, diagnostics, and hardware tools in a single native app for iPhone, iPad, Mac Catalyst, and visionOS.
+UToolkit is an all-in-one utility app for Apple platforms. It brings together calculation, conversion, developer, diagnostics, network, document, color, QR code, and serial tools in a single native app for iPhone, iPad, Mac Catalyst, and visionOS.
 
 ## Features
 
@@ -37,19 +37,30 @@ UToolkit is an all-in-one utility app for Apple platforms. It brings together ca
 - Document conversion: Markdown to HTML/PDF.
 - Color tools: HEX/RGB/HSL conversion, palette browsing, and color value copying.
 - Network diagnostics: Ping latency testing and Traceroute route tracing.
+- Serial tools: serial terminal, baud rate/data bit/stop bit/parity configuration, text/Hex send and receive, and USB-to-serial adapter support where the platform allows hardware access.
 
-### USB Serial Tools
+### Cross-Platform Serial Tools
 
-On macOS through Mac Catalyst, UToolkit includes a USB serial debugging tool for embedded development and hardware diagnostics.
+UToolkit's goal is to provide serial debugging tools across all supported Apple platforms. The user-facing goal is a consistent serial terminal experience for embedded development, hardware diagnostics, and USB-to-serial adapter workflows.
 
-Planned and supported serial workflows include:
+Because serial hardware access differs across Apple platforms, the implementation may use different system capabilities depending on the platform, device, adapter, and Apple entitlement approval status.
+
+Planned serial workflows include:
 
 - Detecting common USB-to-serial bridge chips.
 - Configuring baud rate, data bits, stop bits, and parity.
 - Sending and receiving serial data in text or Hex mode.
 - Supporting common adapters such as WCH CH34x, Silicon Labs CP210x, FTDI USB-to-Serial, and Prolific PL2303.
-- Using an existing macOS or vendor serial driver when one is available.
-- Providing DriverKit-based support for selected USB-to-serial adapters when no suitable driver is available.
+- Using an existing system or vendor serial driver when one is available.
+- Providing DriverKit-based support for selected USB-to-serial adapters when no suitable driver is available and the platform supports the required driver model.
+- Keeping serial traffic local between the user's device and the connected hardware.
+
+Platform strategy:
+
+- macOS through Mac Catalyst: use existing `/dev/cu.*` serial devices when available, and use DriverKit-based USB serial support for selected adapters when needed.
+- iPadOS: provide serial support where Apple-supported driver, accessory, or DriverKit capabilities are available and approved.
+- iOS: provide serial support where the device, adapter, and Apple-supported accessory/hardware APIs allow it.
+- visionOS: keep the serial tool available in the product roadmap and enable hardware access only when supported by the platform.
 
 ## DriverKit Purpose
 
@@ -61,6 +72,8 @@ Requested DriverKit capabilities are limited to USB serial adapter support:
 - DriverKit USB Transport
 - UserClient Access, when the main app needs to communicate directly with the DriverKit extension
 - System Extension installation, when the app installs or manages the DriverKit extension
+
+The DriverKit request is not intended for broad USB or PCI device access. It is specifically for USB-to-serial adapters used by the serial terminal feature.
 
 Bundle identifiers:
 
@@ -78,15 +91,6 @@ Some tools may communicate with user-selected local or remote targets in order t
 Serial data is processed locally between the user's device and the connected hardware. UToolkit does not upload serial logs or transmitted serial data to our servers.
 
 Apple may collect diagnostic information depending on the user's Apple system settings and App Store/TestFlight diagnostics preferences. This may include crash logs, performance data, telemetry, and other diagnostic information used to improve app quality. We may review aggregated or Apple-provided diagnostic reports for technical improvement. Such data is generally not associated with the user and is discarded when no longer needed for debugging or product improvement.
-
-## Platform
-
-- iOS
-- iPadOS
-- macOS through Mac Catalyst
-- visionOS
-
-Some hardware-related features may be available only on platforms that provide the required system APIs and hardware access.
 
 ## Support
 
