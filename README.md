@@ -84,13 +84,7 @@ Planned DriverKit extension: com.bowen.utoolkit.serialdriver
 
 ## Privacy
 
-UToolkit does not connect to or upload user content to our own servers.
-
-Some tools may communicate with user-selected local or remote targets in order to perform the requested operation. For example, port scanning, LAN scanning, Ping, Traceroute, QR code scanning, document export, and serial communication operate only when initiated by the user.
-
-Serial data is processed locally between the user's device and the connected hardware. UToolkit does not upload serial logs or transmitted serial data to our servers.
-
-Apple may collect diagnostic information depending on the user's Apple system settings and App Store/TestFlight diagnostics preferences. This may include crash logs, performance data, telemetry, and other diagnostic information used to improve app quality. We may review aggregated or Apple-provided diagnostic reports for technical improvement. Such data is generally not associated with the user and is discarded when no longer needed for debugging or product improvement.
+See Privacy.md.
 
 ## Support
 
